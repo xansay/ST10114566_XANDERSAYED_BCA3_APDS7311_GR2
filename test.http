@@ -1,0 +1,47 @@
+// Create a new user with a POST request
+POST https://localhost:3000/api/users HTTP/1.1
+Content-Type: application/json
+Authorization: Filmhear22
+
+{
+    "username": "ST10114566",
+    "firstName": "Xander",
+    "lastName": "Sayed",
+    "password": "Filmhear22"
+}
+###
+
+// Authenticate a user with a POST request
+POST https://localhost:3000/api/auth HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer Filmhear22
+
+{
+    "username": "ST10114566",
+    "password": "Filmhear22"
+}
+###
+
+// Create a new post with a POST request
+POST https://localhost:3000/api/posts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer Filmhear22
+
+{
+    "title": "First POST",
+    "description": "First Description",
+    "departmentCode": "A100"
+}
+###
+
+// Retrieve posts with a GET request
+GET https://localhost:3000/api/posts HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer Filmhear22
+###
+
+// Delete a specific post with a DELETE request
+DELETE https://localhost:3000/api/posts/6522d10883d2afe0c7c44a43 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer Filmhear22
+###
