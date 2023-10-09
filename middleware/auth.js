@@ -1,27 +1,30 @@
-// Import the necessary JWT library for authentication
+// Import the 'jsonwebtoken' library for handling JWTs
 const jwt = require('jsonwebtoken');
 
-// Define an authentication middleware function for verifying JWT tokens
-function authenticateToken(req, res, next) {
-  // Extract the token from the 'Authorization' header, if it exists
-  const token = req.header('Authorization')?.split('Bearer ')[1];
+// Middleware function for authentication using JWT
+function auth(req, res, next){
+    // Get the JWT token from the 'x-auth-token' header in the request
+    const token = req.header('x-auth-token');
+    let id;
 
-  try {
-    // Check if a token exists
-    if (token) {
-      // Verify the token using the JWT_SECRET_KEY
-      jwt.verify(token, process.env.JWT_SECRET_KEY);
-      // If verification is successful, move to the next middleware or route handler
-      return next();
-    } else {
-      // If no token is found, return a 403 Forbidden response
-      return res.sendStatus(403);
+    try {
+        // Verify the token using the 'JWT_SECRET_KEY' from environment variables
+        const { userId } = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        id = userId;
+    } catch (err) {
+        // If token verification fails, return a 401 Unauthorized status
+        return res.sendStatus(401);
     }
-  } catch (err) {
-    // If an error occurs during token verification, return a 403 Forbidden response
-    return res.sendStatus(403);
-  }
+
+    // If token is valid, set the user ID in the request object and proceed to the next middleware
+    if (id) {
+        req.user = { id };
+        return next();
+    }
+
+    // If no valid user ID is found, return a 401 Unauthorized status
+    res.sendStatus(401);
 }
 
-// Export the authenticateToken middleware function for use in other modules
-module.exports = authenticateToken;
+// Export the 'auth' middleware for use in other parts of the application
+module.exports = auth;

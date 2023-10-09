@@ -3,7 +3,7 @@ const router = require('express').Router();
 const { Post, validatePost } = require('../models/post');
 const auth = require('../middleware/auth');
 
-// Handle GET request to retrieve all posts
+// This is the GET request that's gets all the posts
 router.get('/', async (req, res) => {
     // Fetch all posts from the database
     const posts = await Post.find();
@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.send(posts);
 });
 
-// Handle POST request to create a new post
+// This is the POST request that makes a single post
 router.post('/', async (req, res) => {
     // Validate the incoming post data
     const { error } = validatePost(req.body);
@@ -25,20 +25,17 @@ router.post('/', async (req, res) => {
     res.send(post);
 });
 
-// Handle GET request to retrieve a single post by its ID
+// This is the GET request that's GET a single post by its ID
 router.get('/:id', async (req, res) => {
     // Find a post by its ID in the database
-    const post = await Post.findById({ _id: req.params.id });
+    const post = await Post.findById(req.params.id);
     if (post) return res.send(post);
-    // If the post is not found, send a 404 status code
     res.sendStatus(404);
 });
 
-// Handle DELETE request to delete a single post by its ID
+// This is the DELETE request that's delete a single post by its ID
 router.delete('/:id', async (req, res) => {
-    // Delete a post by its ID in the database
     const result = await Post.deleteOne({ _id: req.params.id });
-    // Send the result of the deletion in the response
     res.send(result);
 });
 
