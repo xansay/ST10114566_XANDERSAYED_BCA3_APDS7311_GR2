@@ -1,27 +1,19 @@
-// Import necessary modules and dependencies
 const router = require('express').Router();
 const { Post, validatePost } = require('../models/post');
 const auth = require('../middleware/auth');
 
-// This is the GET request that's gets all the posts
+// This is the GET that calls all the posts
 router.get('/', async (req, res) => {
-    // Fetch all posts from the database
     const posts = await Post.find();
-    // Send the retrieved posts in the response
     res.send(posts);
 });
 
-// This is the POST request that makes a single post
-router.post('/', async (req, res) => {
-    // Validate the incoming post data
+// This is the POST that creates a single post
+router.post('/',async (req, res) => {
     const { error } = validatePost(req.body);
     if (error) return res.status(400).json(error.details[0].message);
-
-    // Create a new post instance and save it to the database
     const post = new Post(req.body);
     post.save();
-
-    // Send the newly created post in the response
     res.send(post);
 });
 

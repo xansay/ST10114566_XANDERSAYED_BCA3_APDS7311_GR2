@@ -20,6 +20,16 @@ app.use(cors({ origin: 'https://localhost:3000', optionsSuccessStatus: 200 }));
 app.use(express.json());
 app.use(hsts);
 
+// Additional CORS headers
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  res.setHeader('Access-Control-Allow-Methods', '*');
+  next();
+});
 // Define routes for authentication, user, and posts
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/users', require('./routes/user'));
